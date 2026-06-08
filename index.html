@@ -111,6 +111,11 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
 .service-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
 .service-card{background:linear-gradient(145deg,rgba(255,215,64,.08),rgba(255,215,64,.02));border:1px solid rgba(255,215,64,.2);border-radius:14px;padding:20px}
 .service-card h3{color:#ffd740;margin-bottom:12px;font-size:1.1em}
+.svc-desc{color:#b0bec5;font-size:.85em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px dashed rgba(255,215,64,.2);line-height:1.5}
+.svc-fn{padding:8px 0;font-size:.88em;border-bottom:1px solid rgba(255,255,255,.04)}
+.svc-fn:last-child{border-bottom:none}
+.svc-fn .fn-desc{display:flex;align-items:center;gap:8px;color:#fff9c4;font-weight:500}
+.svc-fn code{display:block;color:#80cbc4;font-family:Consolas,monospace;font-size:.82em;margin-top:4px;padding-left:14px}
 .method-item{display:flex;align-items:center;gap:8px;padding:6px 0;color:#fff9c4;font-family:Consolas,monospace;font-size:.9em}
 .method-dot{width:6px;height:6px;background:#ffd740;border-radius:50%;flex-shrink:0}
 .flow-container{display:flex;flex-direction:column;align-items:center;gap:0;padding:20px}
@@ -754,60 +759,69 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
     <div class="service-grid">
         <div class="service-card">
             <h3>AuthService</h3>
-            <div class="method-item"><span class="method-dot"></span> sendOTP(phone)</div>
-            <div class="method-item"><span class="method-dot"></span> verifyOTP(phone, otp)</div>
-            <div class="method-item"><span class="method-dot"></span> logout(userId)</div>
+            <p class="svc-desc">Takes care of user login with OTP, verifying the code, and logging out</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send OTP to user's phone number</div><code>void sendOTP(String phoneNumber)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if OTP is correct, return login token</div><code>String verifyOTP(String phoneNumber, String otp)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Log the user out</div><code>void logout(Long userId)</code></div>
         </div>
         <div class="service-card">
             <h3>MessageService</h3>
-            <div class="method-item"><span class="method-dot"></span> sendMessage()</div>
-            <div class="method-item"><span class="method-dot"></span> getMessages(convId, page)</div>
-            <div class="method-item"><span class="method-dot"></span> editMessage()</div>
-            <div class="method-item"><span class="method-dot"></span> deleteMessage()</div>
-            <div class="method-item"><span class="method-dot"></span> searchMessages()</div>
+            <p class="svc-desc">Handles sending, receiving, editing, deleting, and searching messages</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send a new message to another user</div><code>Message sendMessage(Long senderId, Long receiverId, String content, MessageType type)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all messages in a conversation (with pages)</div><code>List&lt;Message&gt; getMessages(String conversationId, int page, int size)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Edit a message you already sent</div><code>void editMessage(String messageId, String newContent, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Delete a message (for you or for everyone)</div><code>void deleteMessage(String messageId, Long userId, DeleteType deleteType)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Search for messages by keyword</div><code>List&lt;Message&gt; searchMessages(String conversationId, String keyword, int page)</code></div>
         </div>
         <div class="service-card">
             <h3>MessageStatusService <span class="new-badge" style="font-size:.55em">NEW</span></h3>
-            <div class="method-item"><span class="method-dot"></span> markAsDelivered()</div>
-            <div class="method-item"><span class="method-dot"></span> markAsSeen()</div>
-            <div class="method-item"><span class="method-dot"></span> sendReadReceipt()</div>
+            <p class="svc-desc">Tracks if a message is sent, delivered, or seen (read receipts)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark a message as delivered to the user</div><code>void markAsDelivered(String messageId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark a message as seen (blue tick)</div><code>void markAsSeen(String messageId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get current status of a message</div><code>MessageStatus getStatus(String messageId)</code></div>
         </div>
         <div class="service-card">
             <h3>ConversationService</h3>
-            <div class="method-item"><span class="method-dot"></span> getOrCreateConversation()</div>
-            <div class="method-item"><span class="method-dot"></span> getConversations(userId)</div>
+            <p class="svc-desc">Manages chat threads between users</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get existing chat or create a new one</div><code>Conversation getOrCreateConversation(Long userId1, Long userId2)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all chats for a user</div><code>List&lt;Conversation&gt; getConversations(Long userId, int page)</code></div>
         </div>
         <div class="service-card">
             <h3>PresenceService</h3>
-            <div class="method-item"><span class="method-dot"></span> markOnline()</div>
-            <div class="method-item"><span class="method-dot"></span> markOffline()</div>
-            <div class="method-item"><span class="method-dot"></span> getUserStatus()</div>
-            <div class="method-item"><span class="method-dot"></span> broadcastTyping() <span class="new-badge" style="font-size:.55em">NEW</span></div>
+            <p class="svc-desc">Tracks if a user is online, offline, or currently typing</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark user as online</div><code>void markOnline(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark user as offline and save last seen time</div><code>void markOffline(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if user is online or offline</div><code>UserStatus getUserStatus(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Show "typing..." to the other user <span class="new-badge" style="font-size:.55em">NEW</span></div><code>void broadcastTyping(Long userId, String conversationId)</code></div>
         </div>
         <div class="service-card">
             <h3>NotificationService</h3>
-            <div class="method-item"><span class="method-dot"></span> sendPushNotification()</div>
-            <div class="method-item"><span class="method-dot"></span> sendSMSFallback() <span class="new-badge" style="font-size:.55em">NEW</span></div>
+            <p class="svc-desc">Sends push notifications when user is offline, falls back to SMS</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send push notification to user's device</div><code>void sendPushNotification(Long userId, String title, String body)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send SMS if push notification fails <span class="new-badge" style="font-size:.55em">NEW</span></div><code>void sendSMSFallback(Long userId, String message)</code></div>
         </div>
         <div class="service-card" style="border-color:rgba(255,171,64,.3)">
             <h3 style="color:#ffab40">GroupService <span class="new-badge" style="font-size:.55em">NEW</span></h3>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> createGroup()</div>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> addMember()</div>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> removeMember()</div>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> sendGroupMessage()</div>
+            <p class="svc-desc">Handles creating groups, adding/removing members, and group messages</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Create a new group with members</div><code>Group createGroup(String name, Long createdBy, List&lt;Long&gt; memberIds)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Add a new member to the group</div><code>void addMember(String groupId, Long adminId, Long newMemberId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Remove a member from the group</div><code>void removeMember(String groupId, Long adminId, Long memberId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Send a message to the group</div><code>void sendGroupMessage(String groupId, Long senderId, String content)</code></div>
         </div>
         <div class="service-card" style="border-color:rgba(255,171,64,.3)">
             <h3 style="color:#ffab40">MediaService <span class="new-badge" style="font-size:.55em">NEW</span></h3>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> uploadMedia()</div>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> downloadMedia()</div>
-            <div class="method-item"><span class="method-dot" style="background:#ffab40"></span> generatePresignedUrl()</div>
+            <p class="svc-desc">Handles uploading and downloading photos, videos, and documents</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Upload a file (image, video, doc)</div><code>String uploadMedia(MultipartFile file, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Download a file by its URL</div><code>byte[] downloadMedia(String mediaUrl)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot" style="background:#ffab40"></span> Get a temporary download link</div><code>String generatePresignedUrl(String mediaKey, int expiryMinutes)</code></div>
         </div>
         <div class="service-card">
             <h3>CallService</h3>
-            <div class="method-item"><span class="method-dot"></span> startCall()</div>
-            <div class="method-item"><span class="method-dot"></span> acceptCall()</div>
-            <div class="method-item"><span class="method-dot"></span> rejectCall() <span class="new-badge" style="font-size:.55em">NEW</span></div>
-            <div class="method-item"><span class="method-dot"></span> endCall()</div>
+            <p class="svc-desc">Manages voice and video calls between users</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Start a new call to another user</div><code>Call startCall(Long callerId, Long receiverId, CallType type)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Accept an incoming call</div><code>void acceptCall(String callId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Reject an incoming call <span class="new-badge" style="font-size:.55em">NEW</span></div><code>void rejectCall(String callId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> End an ongoing call</div><code>void endCall(String callId, Long userId)</code></div>
         </div>
     </div>
 </div>
@@ -1099,6 +1113,19 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
             <div class="calc-row"><span class="calc-label">Status Updates</span><span class="calc-value">~460K QPS</span></div>
             <div class="calc-row"><span class="calc-label">Presence / Typing</span><span class="calc-value">~100K QPS</span></div>
             <div class="calc-result"><span class="calc-label">Total API QPS</span><span class="calc-value">~1.5M QPS</span></div>
+        </div>
+
+        <div class="cap-card">
+            <h4>CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Total API QPS</span><span class="calc-value">~1.5M QPS</span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~10K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~150 servers</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">CPU cores per server (8 cores)</span><span class="calc-value"></span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores</span><span class="calc-value">~1,200 cores</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">WebSocket Servers (50K conn/server)</span><span class="calc-value">~2,000 servers</span></div>
+            <div class="calc-row"><span class="calc-label">Redis Cluster Nodes</span><span class="calc-value">10-20 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">DB Shards</span><span class="calc-value">100+ shards</span></div>
+            <div class="calc-row"><span class="calc-label">Kafka Brokers</span><span class="calc-value">30-50 brokers</span></div>
         </div>
     </div>
 
@@ -1778,58 +1805,66 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
     <div class="service-grid">
         <div class="service-card">
             <h3>UrlService</h3>
-            <div class="method-item"><span class="method-dot"></span> createShortUrl(request, userId)</div>
-            <div class="method-item"><span class="method-dot"></span> resolveUrl(shortCode)</div>
-            <div class="method-item"><span class="method-dot"></span> deactivateUrl(shortCode, userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getUserUrls(userId, pageable)</div>
-            <div class="method-item"><span class="method-dot"></span> handleDuplicateUrl(originalUrl, userId)</div>
+            <p class="svc-desc">Creates short URLs, resolves them back to original URLs, and manages user's URLs</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new short URL</div><code>ShortUrl createShortUrl(CreateUrlRequest request, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get the original URL from a short code</div><code>String resolveUrl(String shortCode)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Turn off a short URL so it stops working</div><code>void deactivateUrl(String shortCode, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all short URLs created by a user</div><code>Page&lt;ShortUrl&gt; getUserUrls(Long userId, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if same URL was already shortened</div><code>Optional&lt;ShortUrl&gt; handleDuplicateUrl(String originalUrl, Long userId)</code></div>
         </div>
         <div class="service-card">
             <h3>RedirectService</h3>
-            <div class="method-item"><span class="method-dot"></span> redirect(shortCode, request)</div>
-            <div class="method-item"><span class="method-dot"></span> checkCacheFirst(shortCode)</div>
-            <div class="method-item"><span class="method-dot"></span> fallbackToDb(shortCode)</div>
-            <div class="method-item"><span class="method-dot"></span> validateAccessible(url)</div>
+            <p class="svc-desc">Redirects users from short URL to the original URL, checks cache first for speed</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Redirect user to the original URL</div><code>String redirect(String shortCode, HttpServletRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Look up URL in cache first (fast)</div><code>Optional&lt;String&gt; checkCacheFirst(String shortCode)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Look up URL in database if not in cache</div><code>String fallbackToDb(String shortCode)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Make sure the URL is still reachable</div><code>boolean validateAccessible(String url)</code></div>
         </div>
         <div class="service-card">
             <h3>AnalyticsService</h3>
-            <div class="method-item"><span class="method-dot"></span> recordClick(shortCode, request)</div>
-            <div class="method-item"><span class="method-dot"></span> getClickStats(shortCode, range)</div>
-            <div class="method-item"><span class="method-dot"></span> getDailyBreakdown(shortCode, days)</div>
-            <div class="method-item"><span class="method-dot"></span> aggregateDailyStats()</div>
+            <p class="svc-desc">Tracks and reports how many times each short URL was clicked</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Record a click when someone uses the short URL</div><code>void recordClick(String shortCode, HttpServletRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get total clicks and stats for a short URL</div><code>ClickStats getClickStats(String shortCode, DateRange range)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get day-by-day click breakdown</div><code>List&lt;DailyStats&gt; getDailyBreakdown(String shortCode, int days)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Combine daily stats into summary (runs as scheduled job)</div><code>void aggregateDailyStats()</code></div>
         </div>
         <div class="service-card">
             <h3>IdGeneratorService</h3>
-            <div class="method-item"><span class="method-dot"></span> generateId()</div>
-            <div class="method-item"><span class="method-dot"></span> handleCollision(shortCode)</div>
-            <div class="method-item"><span class="method-dot"></span> preGenerateIds(batchSize)</div>
+            <p class="svc-desc">Creates unique short codes for URLs and handles conflicts</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Generate a unique short code</div><code>String generateId()</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Handle if the short code already exists</div><code>String handleCollision(String shortCode)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a batch of IDs in advance for speed</div><code>List&lt;String&gt; preGenerateIds(int batchSize)</code></div>
         </div>
         <div class="service-card">
             <h3>CacheService</h3>
-            <div class="method-item"><span class="method-dot"></span> put(shortCode, originalUrl)</div>
-            <div class="method-item"><span class="method-dot"></span> get(shortCode)</div>
-            <div class="method-item"><span class="method-dot"></span> evict(shortCode)</div>
-            <div class="method-item"><span class="method-dot"></span> warmUpCache(hotUrls)</div>
+            <p class="svc-desc">Stores popular URLs in memory (Redis) so they load faster</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Save a URL mapping in cache</div><code>void put(String shortCode, String originalUrl)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get a URL from cache</div><code>Optional&lt;String&gt; get(String shortCode)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove a URL from cache</div><code>void evict(String shortCode)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Pre-load popular URLs into cache on startup</div><code>void warmUpCache(List&lt;ShortUrl&gt; hotUrls)</code></div>
         </div>
         <div class="service-card">
             <h3>UrlValidationService</h3>
-            <div class="method-item"><span class="method-dot"></span> isValidUrl(url)</div>
-            <div class="method-item"><span class="method-dot"></span> isMalicious(url)</div>
-            <div class="method-item"><span class="method-dot"></span> isCustomAliasAvailable(alias)</div>
-            <div class="method-item"><span class="method-dot"></span> sanitizeUrl(url)</div>
+            <p class="svc-desc">Checks if a URL is valid, safe, and not harmful before shortening</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if the URL format is correct</div><code>boolean isValidUrl(String url)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if the URL leads to a harmful site</div><code>boolean isMalicious(String url)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if a custom short code is available</div><code>boolean isCustomAliasAvailable(String alias)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Clean up and fix the URL format</div><code>String sanitizeUrl(String url)</code></div>
         </div>
         <div class="service-card">
             <h3>ExpirationService</h3>
-            <div class="method-item"><span class="method-dot"></span> scheduleExpiration(url)</div>
-            <div class="method-item"><span class="method-dot"></span> cleanupExpiredUrls()</div>
-            <div class="method-item"><span class="method-dot"></span> notifyExpiringUrls()</div>
+            <p class="svc-desc">Removes expired URLs and warns users before their URLs expire</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Set an expiry date for a URL</div><code>void scheduleExpiration(ShortUrl url)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Delete all expired URLs (runs as scheduled job)</div><code>void cleanupExpiredUrls()</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Email users whose URLs are about to expire</div><code>void notifyExpiringUrls()</code></div>
         </div>
         <div class="service-card">
             <h3>AuthService</h3>
-            <div class="method-item"><span class="method-dot"></span> register(email, password)</div>
-            <div class="method-item"><span class="method-dot"></span> login(email, password)</div>
-            <div class="method-item"><span class="method-dot"></span> validateApiKey(apiKey)</div>
-            <div class="method-item"><span class="method-dot"></span> generateJwt(userId)</div>
+            <p class="svc-desc">Handles user signup, login, and API key management</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Register a new user</div><code>User register(String email, String password)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Log in and get a JWT token</div><code>String login(String email, String password)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if an API key is valid</div><code>boolean validateApiKey(String apiKey)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new JWT token for a user</div><code>String generateJwt(Long userId)</code></div>
         </div>
     </div>
 </div>
@@ -2798,57 +2833,64 @@ Url url = <span class="kw">new</span> UrlBuilder()
     <div class="service-grid">
         <div class="service-card">
             <h3>ChatService</h3>
-            <div class="method-item"><span class="method-dot"></span> sendMessage(roomId, senderId, content)</div>
-            <div class="method-item"><span class="method-dot"></span> broadcastToRoom(roomId, event)</div>
-            <div class="method-item"><span class="method-dot"></span> handleTypingIndicator()</div>
-            <div class="method-item"><span class="method-dot"></span> updatePresence(userId, status)</div>
+            <p class="svc-desc">Main service for sending messages, broadcasting to rooms, and showing typing status</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send a message to a chat room</div><code>Message sendMessage(String roomId, Long senderId, String content)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send an event to all users in a room</div><code>void broadcastToRoom(String roomId, ChatEvent event)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Show "typing..." to other users</div><code>void handleTypingIndicator(Long userId, String roomId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Update if user is online or offline</div><code>void updatePresence(Long userId, UserStatus status)</code></div>
         </div>
         <div class="service-card">
             <h3>RoomService</h3>
-            <div class="method-item"><span class="method-dot"></span> createRoom(name, type, createdBy)</div>
-            <div class="method-item"><span class="method-dot"></span> addParticipant(roomId, userId)</div>
-            <div class="method-item"><span class="method-dot"></span> removeParticipant(roomId, userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getUserRooms(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> archiveRoom(roomId)</div>
+            <p class="svc-desc">Manages chat rooms — creating, adding/removing members, listing rooms</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new chat room</div><code>Room createRoom(String name, RoomType type, Long createdBy)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Add a user to a room</div><code>void addParticipant(String roomId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove a user from a room</div><code>void removeParticipant(String roomId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all rooms a user is part of</div><code>List&lt;Room&gt; getUserRooms(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Archive a room (hide but keep data)</div><code>void archiveRoom(String roomId)</code></div>
         </div>
         <div class="service-card">
             <h3>MessageService</h3>
-            <div class="method-item"><span class="method-dot"></span> sendMessage()</div>
-            <div class="method-item"><span class="method-dot"></span> getMessageHistory(roomId, page)</div>
-            <div class="method-item"><span class="method-dot"></span> editMessage(messageId, content)</div>
-            <div class="method-item"><span class="method-dot"></span> deleteMessage(messageId)</div>
-            <div class="method-item"><span class="method-dot"></span> searchMessages(roomId, keyword)</div>
-            <div class="method-item"><span class="method-dot"></span> pinMessage(messageId)</div>
+            <p class="svc-desc">Handles messages — send, get history, edit, delete, search, and pin</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send a new message</div><code>Message sendMessage(String roomId, Long senderId, String content, MessageType type)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get old messages in a room (with pages)</div><code>Page&lt;Message&gt; getMessageHistory(String roomId, int page)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Edit a message you sent</div><code>void editMessage(String messageId, String newContent)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Delete a message</div><code>void deleteMessage(String messageId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Search for messages by keyword</div><code>List&lt;Message&gt; searchMessages(String roomId, String keyword)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Pin an important message in the room</div><code>void pinMessage(String messageId)</code></div>
         </div>
         <div class="service-card">
             <h3>FileService</h3>
-            <div class="method-item"><span class="method-dot"></span> uploadFile(file, messageId)</div>
-            <div class="method-item"><span class="method-dot"></span> downloadFile(attachmentId)</div>
-            <div class="method-item"><span class="method-dot"></span> generatePresignedUrl()</div>
-            <div class="method-item"><span class="method-dot"></span> validateFileType(mimeType)</div>
-            <div class="method-item"><span class="method-dot"></span> deleteFile(attachmentId)</div>
+            <p class="svc-desc">Handles file uploads, downloads, and file type checks in chat</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Upload a file attached to a message</div><code>Attachment uploadFile(MultipartFile file, String messageId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Download a file by its ID</div><code>byte[] downloadFile(String attachmentId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get a temporary download link</div><code>String generatePresignedUrl(String attachmentId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if the file type is allowed</div><code>boolean validateFileType(String mimeType)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Delete a file from storage</div><code>void deleteFile(String attachmentId)</code></div>
         </div>
         <div class="service-card">
             <h3>PresenceService</h3>
-            <div class="method-item"><span class="method-dot"></span> markOnline(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> markOffline(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getUserStatus(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getOnlineUsersInRoom(roomId)</div>
-            <div class="method-item"><span class="method-dot"></span> broadcastPresenceChange()</div>
+            <p class="svc-desc">Tracks who is online or offline and tells other users when status changes</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark user as online</div><code>void markOnline(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark user as offline</div><code>void markOffline(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if a user is online</div><code>UserStatus getUserStatus(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all online users in a room</div><code>List&lt;Long&gt; getOnlineUsersInRoom(String roomId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Tell everyone in the room about a status change</div><code>void broadcastPresenceChange(Long userId, UserStatus status)</code></div>
         </div>
         <div class="service-card">
             <h3>WebSocketSessionManager</h3>
-            <div class="method-item"><span class="method-dot"></span> addSession(userId, session)</div>
-            <div class="method-item"><span class="method-dot"></span> removeSession(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getSession(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> isConnected(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getSessionsByRoom(roomId)</div>
+            <p class="svc-desc">Manages live WebSocket connections for real-time chat</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Save a new connection when user opens chat</div><code>void addSession(Long userId, WebSocketSession session)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove connection when user closes chat</div><code>void removeSession(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get a user's active connection</div><code>WebSocketSession getSession(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if a user is currently connected</div><code>boolean isConnected(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all connections in a room</div><code>List&lt;WebSocketSession&gt; getSessionsByRoom(String roomId)</code></div>
         </div>
         <div class="service-card">
             <h3>NotificationService</h3>
-            <div class="method-item"><span class="method-dot"></span> notifyRoomParticipants()</div>
-            <div class="method-item"><span class="method-dot"></span> sendMentionNotification()</div>
-            <div class="method-item"><span class="method-dot"></span> sendPushNotification()</div>
+            <p class="svc-desc">Sends push notifications for new messages and mentions</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Notify all members of a room about a new message</div><code>void notifyRoomParticipants(String roomId, Message message)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Notify a user when they are @mentioned</div><code>void sendMentionNotification(Long userId, String roomId, String mentionedBy)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send a push notification to user's device</div><code>void sendPushNotification(Long userId, String title, String body)</code></div>
         </div>
     </div>
 </div>
@@ -3177,6 +3219,19 @@ Url url = <span class="kw">new</span> UrlBuilder()
             <div class="calc-row"><span class="calc-label">Top 20% = 1M rooms</span><span class="calc-value"></span></div>
             <div class="calc-row"><span class="calc-label">&times; 100 msgs &times; 200 bytes</span><span class="calc-value"></span></div>
             <div class="calc-result"><span class="calc-label">Redis Cache Size</span><span class="calc-value">~20 GB</span></div>
+        </div>
+
+        <div class="cap-card">
+            <h4>CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Total write QPS</span><span class="calc-value">~5,800 QPS</span></div>
+            <div class="calc-row"><span class="calc-label">WebSocket push QPS</span><span class="calc-value">~145K pushes/s</span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~5K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~6 servers</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">CPU cores per server (4 cores)</span><span class="calc-value"></span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores</span><span class="calc-value">~24 cores</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">WebSocket Servers (50K conn/server)</span><span class="calc-value">~40 servers</span></div>
+            <div class="calc-row"><span class="calc-label">Redis Cluster Nodes</span><span class="calc-value">3 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">DB Read Replicas</span><span class="calc-value">3 replicas</span></div>
         </div>
     </div>
 </div>
@@ -4019,60 +4074,68 @@ Url url = <span class="kw">new</span> UrlBuilder()
     <div class="service-grid">
         <div class="service-card">
             <h3>ProductService</h3>
-            <div class="method-item"><span class="method-dot"></span>createProduct()</div>
-            <div class="method-item"><span class="method-dot"></span>getProductById()</div>
-            <div class="method-item"><span class="method-dot"></span>getByCategory()</div>
-            <div class="method-item"><span class="method-dot"></span>updateProduct()</div>
-            <div class="method-item"><span class="method-dot"></span>delistProduct()</div>
+            <p class="svc-desc">Manages products — create, view, update, and remove from listing</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Add a new product to the catalog</div><code>Product createProduct(CreateProductRequest request, Long sellerId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get product details by ID</div><code>Product getProductById(Long productId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all products in a category</div><code>Page&lt;Product&gt; getByCategory(Long categoryId, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Update product info (price, description, etc.)</div><code>Product updateProduct(Long productId, UpdateProductRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove a product from the store</div><code>void delistProduct(Long productId, Long sellerId)</code></div>
         </div>
         <div class="service-card">
             <h3>SearchService</h3>
-            <div class="method-item"><span class="method-dot"></span>search()</div>
-            <div class="method-item"><span class="method-dot"></span>autoSuggest()</div>
-            <div class="method-item"><span class="method-dot"></span>indexProduct()</div>
-            <div class="method-item"><span class="method-dot"></span>removeFromIndex()</div>
+            <p class="svc-desc">Helps users find products using search and auto-suggestions</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Search products by keyword</div><code>Page&lt;Product&gt; search(String query, SearchFilters filters, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Show suggestions as user types</div><code>List&lt;String&gt; autoSuggest(String prefix)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Add a product to the search index</div><code>void indexProduct(Product product)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove a product from search index</div><code>void removeFromIndex(Long productId)</code></div>
         </div>
         <div class="service-card">
             <h3>OrderService</h3>
-            <div class="method-item"><span class="method-dot"></span>placeOrder()</div>
-            <div class="method-item"><span class="method-dot"></span>getOrder()</div>
-            <div class="method-item"><span class="method-dot"></span>getUserOrders()</div>
-            <div class="method-item"><span class="method-dot"></span>cancelOrder()</div>
-            <div class="method-item"><span class="method-dot"></span>updateOrderStatus()</div>
+            <p class="svc-desc">Handles placing, viewing, canceling orders and updating order status</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Place a new order</div><code>Order placeOrder(Long userId, PlaceOrderRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get order details by ID</div><code>Order getOrder(String orderId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all orders for a user</div><code>Page&lt;Order&gt; getUserOrders(Long userId, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Cancel an order (if allowed)</div><code>void cancelOrder(String orderId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Update order status (shipped, delivered, etc.)</div><code>void updateOrderStatus(String orderId, OrderStatus status)</code></div>
         </div>
         <div class="service-card">
             <h3>InventoryService</h3>
-            <div class="method-item"><span class="method-dot"></span>checkAvailability()</div>
-            <div class="method-item"><span class="method-dot"></span>reserveStock()</div>
-            <div class="method-item"><span class="method-dot"></span>releaseStock()</div>
-            <div class="method-item"><span class="method-dot"></span>deductStock()</div>
+            <p class="svc-desc">Tracks product stock — check availability, reserve, release, and deduct</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if product is in stock</div><code>boolean checkAvailability(Long productId, int quantity)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Reserve stock when user starts checkout</div><code>boolean reserveStock(Long productId, int quantity, String orderId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Release stock if order is canceled</div><code>void releaseStock(Long productId, int quantity, String orderId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove stock after order is confirmed</div><code>void deductStock(Long productId, int quantity)</code></div>
         </div>
         <div class="service-card">
             <h3>SellerService</h3>
-            <div class="method-item"><span class="method-dot"></span>registerSeller()</div>
-            <div class="method-item"><span class="method-dot"></span>verifySeller()</div>
-            <div class="method-item"><span class="method-dot"></span>suspendSeller()</div>
-            <div class="method-item"><span class="method-dot"></span>getDashboard()</div>
+            <p class="svc-desc">Manages sellers — registration, verification, suspension, and dashboard</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Register a new seller</div><code>Seller registerSeller(SellerRegistrationRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Verify seller documents and approve</div><code>void verifySeller(Long sellerId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Suspend a seller for policy violation</div><code>void suspendSeller(Long sellerId, String reason)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get seller's sales dashboard</div><code>SellerDashboard getDashboard(Long sellerId)</code></div>
         </div>
         <div class="service-card">
             <h3>DeliveryService</h3>
-            <div class="method-item"><span class="method-dot"></span>assignDelivery()</div>
-            <div class="method-item"><span class="method-dot"></span>trackDelivery()</div>
-            <div class="method-item"><span class="method-dot"></span>updateStatus()</div>
-            <div class="method-item"><span class="method-dot"></span>markDelivered()</div>
+            <p class="svc-desc">Handles delivery — assign driver, track package, update status</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Assign a delivery partner to an order</div><code>Delivery assignDelivery(String orderId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Track where the package is right now</div><code>DeliveryStatus trackDelivery(String orderId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Update delivery status (picked up, on the way, etc.)</div><code>void updateStatus(String deliveryId, DeliveryStatus status)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark order as delivered</div><code>void markDelivered(String deliveryId)</code></div>
         </div>
         <div class="service-card">
             <h3>ReviewService</h3>
-            <div class="method-item"><span class="method-dot"></span>addReview()</div>
-            <div class="method-item"><span class="method-dot"></span>getReviews()</div>
-            <div class="method-item"><span class="method-dot"></span>getRatingAggregation()</div>
-            <div class="method-item"><span class="method-dot"></span>markHelpful()</div>
+            <p class="svc-desc">Manages product reviews and ratings from buyers</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Write a review for a product</div><code>Review addReview(Long userId, Long productId, ReviewRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all reviews for a product</div><code>Page&lt;Review&gt; getReviews(Long productId, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get average rating and star breakdown</div><code>RatingAggregation getRatingAggregation(Long productId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Mark a review as helpful</div><code>void markHelpful(Long reviewId, Long userId)</code></div>
         </div>
         <div class="service-card">
             <h3>WishlistService</h3>
-            <div class="method-item"><span class="method-dot"></span>addToWishlist()</div>
-            <div class="method-item"><span class="method-dot"></span>removeFromWishlist()</div>
-            <div class="method-item"><span class="method-dot"></span>getWishlist()</div>
+            <p class="svc-desc">Lets users save products they want to buy later</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Save a product to wishlist</div><code>void addToWishlist(Long userId, Long productId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Remove a product from wishlist</div><code>void removeFromWishlist(Long userId, Long productId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all products in user's wishlist</div><code>List&lt;Product&gt; getWishlist(Long userId)</code></div>
         </div>
     </div>
 </div>
@@ -4453,6 +4516,19 @@ Url url = <span class="kw">new</span> UrlBuilder()
             <div class="calc-row"><span class="calc-label">Product images (50M x 5 x 500KB)</span><span class="calc-value">~125 TB (S3)</span></div>
             <div class="calc-row"><span class="calc-label">Orders/year (5M/day x 1KB)</span><span class="calc-value">~1.8 TB</span></div>
             <div class="calc-result"><span class="calc-label">Total DB Storage</span><span class="calc-value">~5 TB + 125 TB S3</span></div>
+        </div>
+        <div class="cap-card">
+            <h4>CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Search QPS (peak)</span><span class="calc-value">~29,000 QPS</span></div>
+            <div class="calc-row"><span class="calc-label">Product page views QPS</span><span class="calc-value">~5,800 QPS</span></div>
+            <div class="calc-row"><span class="calc-label">Order processing (peak)</span><span class="calc-value">~10,000 TPS</span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~5K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~30 servers</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">CPU cores per server (8 cores)</span><span class="calc-value"></span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores</span><span class="calc-value">~240 cores</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">Elasticsearch Cluster</span><span class="calc-value">50+ nodes</span></div>
+            <div class="calc-row"><span class="calc-label">Redis Cluster Nodes</span><span class="calc-value">5-10 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">DB Shards (order DB)</span><span class="calc-value">10+ shards</span></div>
         </div>
     </div>
 </div>
@@ -5137,59 +5213,67 @@ Url url = <span class="kw">new</span> UrlBuilder()
     <div class="service-grid">
         <div class="service-card">
             <h3>ProblemService</h3>
-            <div class="method-item"><span class="method-dot"></span> createProblem(req)</div>
-            <div class="method-item"><span class="method-dot"></span> getProblemBySlug(slug)</div>
-            <div class="method-item"><span class="method-dot"></span> listProblems(filter, page)</div>
-            <div class="method-item"><span class="method-dot"></span> updateAcceptanceRate(pId)</div>
+            <p class="svc-desc">Manages coding problems — create, view, list with filters, and track acceptance rate</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Add a new coding problem</div><code>Problem createProblem(CreateProblemRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get a problem by its URL slug (e.g. "two-sum")</div><code>Problem getProblemBySlug(String slug)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> List problems with filters (difficulty, topic, etc.)</div><code>Page&lt;Problem&gt; listProblems(ProblemFilter filter, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Recalculate acceptance rate after new submissions</div><code>void updateAcceptanceRate(Long problemId)</code></div>
         </div>
         <div class="service-card">
             <h3>SubmissionService</h3>
-            <div class="method-item"><span class="method-dot"></span> submit(userId, problemId, code, lang)</div>
-            <div class="method-item"><span class="method-dot"></span> runCode(userId, problemId, code, input)</div>
-            <div class="method-item"><span class="method-dot"></span> getSubmissionStatus(submissionId)</div>
-            <div class="method-item"><span class="method-dot"></span> getUserSubmissions(userId, problemId)</div>
+            <p class="svc-desc">Handles code submissions — submit solution, run test cases, check results</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Submit a solution for judging</div><code>Submission submit(Long userId, Long problemId, String code, Language lang)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Run code with custom input (without submitting)</div><code>RunResult runCode(Long userId, Long problemId, String code, String input)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check the status of a submission (pending, accepted, etc.)</div><code>SubmissionStatus getSubmissionStatus(Long submissionId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all submissions by a user for a problem</div><code>List&lt;Submission&gt; getUserSubmissions(Long userId, Long problemId)</code></div>
         </div>
         <div class="service-card">
             <h3>JudgeService</h3>
-            <div class="method-item"><span class="method-dot"></span> evaluate(submission, testCases)</div>
-            <div class="method-item"><span class="method-dot"></span> compile(code, language)</div>
-            <div class="method-item"><span class="method-dot"></span> execute(binary, input, limits)</div>
-            <div class="method-item"><span class="method-dot"></span> compareOutput(actual, expected)</div>
+            <p class="svc-desc">Compiles, runs, and checks submitted code against expected answers</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Run all test cases and give final result</div><code>JudgeResult evaluate(Submission submission, List&lt;TestCase&gt; testCases)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Compile the code into a runnable program</div><code>CompileResult compile(String code, Language language)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Run the compiled program with given input</div><code>ExecutionResult execute(String binary, String input, ResourceLimits limits)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Compare user's output with expected output</div><code>boolean compareOutput(String actual, String expected)</code></div>
         </div>
         <div class="service-card">
             <h3>ContestService</h3>
-            <div class="method-item"><span class="method-dot"></span> createContest(req)</div>
-            <div class="method-item"><span class="method-dot"></span> registerUser(contestId, userId)</div>
-            <div class="method-item"><span class="method-dot"></span> getLeaderboard(contestId, page)</div>
-            <div class="method-item"><span class="method-dot"></span> calculateRatings(contestId)</div>
+            <p class="svc-desc">Manages coding contests — create, register users, and track scores</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new contest</div><code>Contest createContest(CreateContestRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Register a user for a contest</div><code>void registerUser(Long contestId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get contest leaderboard with rankings</div><code>Page&lt;LeaderboardEntry&gt; getLeaderboard(Long contestId, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Calculate rating changes after contest ends</div><code>void calculateRatings(Long contestId)</code></div>
         </div>
         <div class="service-card">
             <h3>LeaderboardService</h3>
-            <div class="method-item"><span class="method-dot"></span> getGlobalRanking(page)</div>
-            <div class="method-item"><span class="method-dot"></span> getUserRank(userId)</div>
-            <div class="method-item"><span class="method-dot"></span> updateRating(userId, delta)</div>
-            <div class="method-item"><span class="method-dot"></span> refreshCache()</div>
+            <p class="svc-desc">Tracks global rankings and user ratings across all problems</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get global ranking list (with pages)</div><code>Page&lt;RankEntry&gt; getGlobalRanking(Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get a specific user's rank</div><code>RankEntry getUserRank(Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Update user's rating after a contest</div><code>void updateRating(Long userId, int delta)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Rebuild the leaderboard cache</div><code>void refreshCache()</code></div>
         </div>
         <div class="service-card">
             <h3>DiscussionService</h3>
-            <div class="method-item"><span class="method-dot"></span> createPost(userId, problemId, req)</div>
-            <div class="method-item"><span class="method-dot"></span> getDiscussions(problemId, page)</div>
-            <div class="method-item"><span class="method-dot"></span> upvote(discussionId, userId)</div>
-            <div class="method-item"><span class="method-dot"></span> addComment(discussionId, comment)</div>
+            <p class="svc-desc">Manages discussion posts, comments, and upvotes for each problem</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new discussion post</div><code>Discussion createPost(Long userId, Long problemId, CreatePostRequest request)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get all discussions for a problem</div><code>Page&lt;Discussion&gt; getDiscussions(Long problemId, Pageable pageable)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Upvote a helpful discussion</div><code>void upvote(Long discussionId, Long userId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Add a comment to a discussion</div><code>Comment addComment(Long discussionId, CommentRequest comment)</code></div>
         </div>
         <div class="service-card">
             <h3>AuthService</h3>
-            <div class="method-item"><span class="method-dot"></span> register(username, email, password)</div>
-            <div class="method-item"><span class="method-dot"></span> login(email, password)</div>
-            <div class="method-item"><span class="method-dot"></span> oauthLogin(provider, token)</div>
-            <div class="method-item"><span class="method-dot"></span> refreshToken(refreshToken)</div>
+            <p class="svc-desc">Handles user signup, login (email + Google/GitHub OAuth), and token refresh</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Register a new user</div><code>User register(String username, String email, String password)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Log in with email and password</div><code>String login(String email, String password)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Log in using Google or GitHub</div><code>String oauthLogin(String provider, String token)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get a new token when current one expires</div><code>String refreshToken(String refreshToken)</code></div>
         </div>
         <div class="service-card">
             <h3>SandboxService</h3>
-            <div class="method-item"><span class="method-dot"></span> createContainer(language)</div>
-            <div class="method-item"><span class="method-dot"></span> executeInSandbox(containerId, code)</div>
-            <div class="method-item"><span class="method-dot"></span> destroyContainer(containerId)</div>
-            <div class="method-item"><span class="method-dot"></span> enforceResourceLimits()</div>
+            <p class="svc-desc">Creates safe Docker containers to run user code without security risks</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new container for a language</div><code>String createContainer(Language language)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Run code inside the safe container</div><code>ExecutionResult executeInSandbox(String containerId, String code)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Destroy the container after execution</div><code>void destroyContainer(String containerId)</code></div>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Set CPU, memory, and time limits</div><code>void enforceResourceLimits(String containerId, ResourceLimits limits)</code></div>
         </div>
     </div>
 </div>
@@ -5456,6 +5540,18 @@ Url url = <span class="kw">new</span> UrlBuilder()
             <div class="calc-row"><span class="calc-label">Leaderboard queries</span><span class="calc-value">~2M/day</span></div>
             <div class="calc-row"><span class="calc-label">Discussion page views</span><span class="calc-value">~3M/day</span></div>
             <div class="calc-result"><span class="calc-label">Read QPS (avg)</span><span class="calc-value">~116 QPS</span></div>
+        </div>
+        <div class="cap-card">
+            <h4>CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">API servers (Read + Write)</span><span class="calc-value">~150 QPS total</span></div>
+            <div class="calc-row"><span class="calc-label">Each API server handles</span><span class="calc-value">~2K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">API Servers Needed</span><span class="calc-value">~3 servers</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">Judge Worker CPU (peak)</span><span class="calc-value">~2,890 cores</span></div>
+            <div class="calc-row"><span class="calc-label">Each worker = 1 core</span><span class="calc-value"></span></div>
+            <div class="calc-result"><span class="calc-label">Judge Worker Machines (peak)</span><span class="calc-value">~360 machines (8 cores each)</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">Normal load workers</span><span class="calc-value">~50 containers</span></div>
+            <div class="calc-row"><span class="calc-label">Redis (leaderboard + cache)</span><span class="calc-value">3 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">DB Read Replicas</span><span class="calc-value">2-3 replicas</span></div>
         </div>
     </div>
 </div>
@@ -5981,43 +6077,43 @@ Url url = <span class="kw">new</span> UrlBuilder()
     <div class="service-grid">
         <div class="service-card">
             <h3>NotificationService</h3>
-            <div class="service-method">send(request)</div>
-            <div class="service-desc">Validates prefs, renders template, routes to Kafka priority queue</div>
+            <p class="svc-desc">Main service — checks user preferences, builds the message, and sends it to the right queue</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send a notification to a user</div><code>void send(NotificationRequest request)</code></div>
         </div>
         <div class="service-card">
             <h3>PushNotificationSender</h3>
-            <div class="service-method">send(notification, user)</div>
-            <div class="service-desc">Sends via FCM/APNs, handles token invalidation</div>
+            <p class="svc-desc">Sends push notifications to mobile devices using Firebase or Apple Push</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send push notification to user's phone</div><code>void send(Notification notification, User user)</code></div>
         </div>
         <div class="service-card">
             <h3>EmailNotificationSender</h3>
-            <div class="service-method">send(notification, user)</div>
-            <div class="service-desc">Sends via SES/SMTP, tracks bounces</div>
+            <p class="svc-desc">Sends emails using AWS SES or SMTP and tracks if emails bounce</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send an email notification</div><code>void send(Notification notification, User user)</code></div>
         </div>
         <div class="service-card">
             <h3>SmsNotificationSender</h3>
-            <div class="service-method">send(notification, user)</div>
-            <div class="service-desc">Sends via Twilio/SNS, delivery receipts</div>
+            <p class="svc-desc">Sends SMS messages using Twilio or AWS SNS with delivery tracking</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Send an SMS notification</div><code>void send(Notification notification, User user)</code></div>
         </div>
         <div class="service-card">
             <h3>TemplateService</h3>
-            <div class="service-method">render(templateId, params)</div>
-            <div class="service-desc">Mustache/Thymeleaf rendering, caches compiled templates</div>
+            <p class="svc-desc">Builds notification messages from templates (like "Hi {name}, your order is ready")</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Fill in template with actual values</div><code>String render(String templateId, Map&lt;String, Object&gt; params)</code></div>
         </div>
         <div class="service-card">
             <h3>PreferenceService</h3>
-            <div class="service-method">isChannelEnabled(userId, ch)</div>
-            <div class="service-desc">Checks opt-in/out, quiet hours, DND</div>
+            <p class="svc-desc">Checks if user wants to receive notifications — respects opt-out, quiet hours, DND</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if a channel (push/email/sms) is enabled for user</div><code>boolean isChannelEnabled(Long userId, Channel channel)</code></div>
         </div>
         <div class="service-card">
             <h3>RetryService</h3>
-            <div class="service-method">retryFailed()</div>
-            <div class="service-desc">Exponential backoff retries; moves to DLQ after max attempts</div>
+            <p class="svc-desc">Retries failed notifications with increasing wait time, gives up after max tries</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Retry all failed notifications</div><code>void retryFailed()</code></div>
         </div>
         <div class="service-card">
             <h3>SchedulerService</h3>
-            <div class="service-method">processScheduled()</div>
-            <div class="service-desc">Cron job dispatches scheduled notifications at delivery time</div>
+            <p class="svc-desc">Sends scheduled notifications at the right time (like a reminder at 9 AM)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Process all due scheduled notifications</div><code>void processScheduled()</code></div>
         </div>
     </div>
 </div>
@@ -6144,6 +6240,16 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">Daily Storage</div><div class="cap-value">~250 GB/day</div></div>
         <div class="cap-card"><div class="cap-label">Monthly Storage</div><div class="cap-value">~7.5 TB (30-day)</div></div>
         <div class="cap-card"><div class="cap-label">Push Latency (p99)</div><div class="cap-value">&lt; 2 seconds</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Peak QPS</span><span class="calc-value">~11,500/sec</span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~3K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~4 servers</span></div>
+            <div class="calc-row"><span class="calc-label">CPU cores per server (4 cores)</span><span class="calc-value"></span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores</span><span class="calc-value">~16 cores</span></div>
+            <div class="calc-row"><span class="calc-label">Kafka Consumer Workers</span><span class="calc-value">~20 workers</span></div>
+            <div class="calc-row"><span class="calc-label">Kafka Brokers</span><span class="calc-value">3-5 brokers</span></div>
+        </div>
     </div>
 </div>
 
@@ -6493,14 +6599,46 @@ Url url = <span class="kw">new</span> UrlBuilder()
 <div class="section theme-purple">
     <div class="section-title"><span class="section-num">9</span>Service Layer</div>
     <div class="service-grid">
-        <div class="service-card"><h3>VideoUploadService</h3><div class="service-method">upload(file, metadata)</div><div class="service-desc">Handles multipart/chunked upload to S3, creates Video record</div></div>
-        <div class="service-card"><h3>TranscodingService</h3><div class="service-method">transcode(videoId)</div><div class="service-desc">Queues FFmpeg jobs for each resolution; generates HLS segments</div></div>
-        <div class="service-card"><h3>ThumbnailService</h3><div class="service-method">generate(videoId)</div><div class="service-desc">Extracts frames at intervals; generates preview sprite sheet</div></div>
-        <div class="service-card"><h3>StreamingService</h3><div class="service-method">getManifest(videoId, res)</div><div class="service-desc">Returns HLS/DASH manifest; selects CDN edge based on user location</div></div>
-        <div class="service-card"><h3>SearchService</h3><div class="service-method">search(query, filters)</div><div class="service-desc">Elasticsearch fulltext search with relevance scoring</div></div>
-        <div class="service-card"><h3>ViewCountService</h3><div class="service-method">recordView(videoId)</div><div class="service-desc">Buffered view counting in Redis; batch flush to DB every 30s</div></div>
-        <div class="service-card"><h3>ModerationService</h3><div class="service-method">moderate(videoId)</div><div class="service-desc">AI-based NSFW detection; copyright check via audio fingerprinting</div></div>
-        <div class="service-card"><h3>RecommendationService</h3><div class="service-method">getRecommendations(userId)</div><div class="service-desc">Collaborative filtering + content-based; pre-computed via Spark</div></div>
+        <div class="service-card">
+            <h3>VideoUploadService</h3>
+            <p class="svc-desc">Handles video file upload to cloud storage (S3) in chunks</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Upload a video file with its details</div><code>Video upload(MultipartFile file, VideoMetadata metadata)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>TranscodingService</h3>
+            <p class="svc-desc">Converts videos into different quality levels (360p, 720p, 1080p) for streaming</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Start converting a video into all quality levels</div><code>void transcode(Long videoId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>ThumbnailService</h3>
+            <p class="svc-desc">Creates preview images by picking frames from the video</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Generate thumbnail images for a video</div><code>List&lt;String&gt; generate(Long videoId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>StreamingService</h3>
+            <p class="svc-desc">Delivers video stream to user's device from the nearest server (CDN)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get the video stream URL for a given quality</div><code>String getManifest(Long videoId, Resolution resolution)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>SearchService</h3>
+            <p class="svc-desc">Helps users find videos by searching titles, descriptions, and tags</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Search for videos by keyword</div><code>Page&lt;Video&gt; search(String query, SearchFilters filters)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>ViewCountService</h3>
+            <p class="svc-desc">Counts video views using a fast in-memory counter (Redis), saves to DB every 30 seconds</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Record a new view for a video</div><code>void recordView(Long videoId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>ModerationService</h3>
+            <p class="svc-desc">Checks videos for inappropriate content and copyright violations using AI</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check a video for violations</div><code>ModerationResult moderate(Long videoId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>RecommendationService</h3>
+            <p class="svc-desc">Suggests videos the user might like based on what they watched before</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get personalized video recommendations</div><code>List&lt;Video&gt; getRecommendations(Long userId)</code></div>
+        </div>
     </div>
 </div>
 
@@ -6592,6 +6730,17 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">Stream Requests / sec</div><div class="cap-value">~50,000 QPS</div></div>
         <div class="cap-card"><div class="cap-label">CDN Bandwidth</div><div class="cap-value">~40 Tbps peak</div></div>
         <div class="cap-card"><div class="cap-label">View Count Writes</div><div class="cap-value">Buffered in Redis, batch flush every 30s</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Stream QPS (peak)</span><span class="calc-value">~50,000 QPS</span></div>
+            <div class="calc-row"><span class="calc-label">Each API server handles</span><span class="calc-value">~5K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">API Servers Needed</span><span class="calc-value">~10 servers</span></div>
+            <div class="calc-row"><span class="calc-label">Transcode jobs/day</span><span class="calc-value">2M jobs</span></div>
+            <div class="calc-row"><span class="calc-label">Avg transcode time</span><span class="calc-value">~30 min per job</span></div>
+            <div class="calc-result"><span class="calc-label">Transcode Workers (GPU)</span><span class="calc-value">~400 workers</span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores (API)</span><span class="calc-value">~80 cores</span></div>
+            <div class="calc-row"><span class="calc-label">CDN Edge Servers</span><span class="calc-value">1000+ globally</span></div>
+        </div>
     </div>
 </div>
 
@@ -6865,13 +7014,41 @@ Url url = <span class="kw">new</span> UrlBuilder()
 <div class="section theme-purple">
     <div class="section-title"><span class="section-num">9</span>Service Layer</div>
     <div class="service-grid">
-        <div class="service-card"><h3>RateLimiterFilter</h3><div class="service-method">doFilter(request)</div><div class="service-desc">Spring OncePerRequestFilter; intercepts all requests, applies rate limiting</div></div>
-        <div class="service-card"><h3>TokenBucketLimiter</h3><div class="service-method">tryAcquire(key, rule)</div><div class="service-desc">Redis-backed token bucket with atomic Lua script for refill + consume</div></div>
-        <div class="service-card"><h3>SlidingWindowLimiter</h3><div class="service-method">tryAcquire(key, rule)</div><div class="service-desc">Redis sorted set; ZRANGEBYSCORE for window count; ZADD for new request</div></div>
-        <div class="service-card"><h3>FixedWindowLimiter</h3><div class="service-method">tryAcquire(key, rule)</div><div class="service-desc">Redis INCR with TTL; simple but has boundary burst problem</div></div>
-        <div class="service-card"><h3>KeyResolverService</h3><div class="service-method">resolve(request, keyType)</div><div class="service-desc">Extracts user ID from JWT, API key from header, or IP from X-Forwarded-For</div></div>
-        <div class="service-card"><h3>RuleProviderService</h3><div class="service-method">getRule(endpoint, tier)</div><div class="service-desc">Loads rules from DB, caches in local map, refreshes every 60s</div></div>
-        <div class="service-card"><h3>MetricsService</h3><div class="service-method">recordDecision(result)</div><div class="service-desc">Publishes throttle metrics to Prometheus; tracks top blocked clients</div></div>
+        <div class="service-card">
+            <h3>RateLimiterFilter</h3>
+            <p class="svc-desc">Checks every incoming API request and decides if it should be allowed or blocked</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check and filter each request</div><code>void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>TokenBucketLimiter</h3>
+            <p class="svc-desc">Limits requests using token bucket — user gets tokens that refill over time, each request uses one token</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Try to use a token (allow request if tokens available)</div><code>boolean tryAcquire(String key, RateLimitRule rule)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>SlidingWindowLimiter</h3>
+            <p class="svc-desc">Limits requests by counting them in a sliding time window — more accurate than fixed window</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Try to allow request within the time window</div><code>boolean tryAcquire(String key, RateLimitRule rule)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>FixedWindowLimiter</h3>
+            <p class="svc-desc">Limits requests in fixed time blocks (e.g. 100 requests per minute) — simple but less accurate</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Try to allow request within the fixed window</div><code>boolean tryAcquire(String key, RateLimitRule rule)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>KeyResolverService</h3>
+            <p class="svc-desc">Figures out who is making the request — by user ID, API key, or IP address</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Extract the identity key from the request</div><code>String resolve(HttpServletRequest request, KeyType keyType)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>RuleProviderService</h3>
+            <p class="svc-desc">Loads rate limit rules from database and keeps them cached in memory for speed</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get the rate limit rule for an endpoint and user tier</div><code>RateLimitRule getRule(String endpoint, UserTier tier)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>MetricsService</h3>
+            <p class="svc-desc">Tracks how many requests are allowed or blocked, for monitoring dashboards</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Record if a request was allowed or blocked</div><code>void recordDecision(RateLimitResult result)</code></div>
+        </div>
     </div>
 </div>
 
@@ -6998,6 +7175,15 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">Lua Script Latency</div><div class="cap-value">&lt; 1ms (p99)</div></div>
         <div class="cap-card"><div class="cap-label">Filter Overhead</div><div class="cap-value">&lt; 2ms added latency per request</div></div>
         <div class="cap-card"><div class="cap-label">Log Storage</div><div class="cap-value">~8.6 TB/day (if logging all, sample at 1%)</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">API QPS</span><span class="calc-value">100,000 QPS</span></div>
+            <div class="calc-row"><span class="calc-label">Rate limiter runs as filter on each server</span><span class="calc-value"></span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~10K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~10 servers</span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores (4 per server)</span><span class="calc-value">~40 cores</span></div>
+            <div class="calc-row"><span class="calc-label">Redis Cluster (rate limit data)</span><span class="calc-value">3-5 nodes</span></div>
+        </div>
     </div>
 </div>
 
@@ -7341,14 +7527,46 @@ Url url = <span class="kw">new</span> UrlBuilder()
 <div class="section theme-purple">
     <div class="section-title"><span class="section-num">9</span>Service Layer</div>
     <div class="service-grid">
-        <div class="service-card"><h3>PaymentService</h3><div class="service-method">initiatePayment(request)</div><div class="service-desc">Idempotency check → fraud check → gateway.initiate → save → ledger entry</div></div>
-        <div class="service-card"><h3>GatewayRoutingService</h3><div class="service-method">selectGateway(method, amount)</div><div class="service-desc">Routes to optimal gateway based on method, success rate, cost; failover logic</div></div>
-        <div class="service-card"><h3>RefundService</h3><div class="service-method">refund(paymentId, amount)</div><div class="service-desc">Validates refundable amount → gateway.refund → update status → reverse ledger</div></div>
-        <div class="service-card"><h3>WalletService</h3><div class="service-method">debit(userId, amount)</div><div class="service-desc">Pessimistic lock → check balance → debit → ledger entry (all in single txn)</div></div>
-        <div class="service-card"><h3>LedgerService</h3><div class="service-method">recordEntry(entry)</div><div class="service-desc">Double-entry bookkeeping: every payment creates debit + credit entries</div></div>
-        <div class="service-card"><h3>WebhookService</h3><div class="service-method">processWebhook(payload, sig)</div><div class="service-desc">Verify signature → idempotent processing → update payment status</div></div>
-        <div class="service-card"><h3>ReconciliationService</h3><div class="service-method">reconcile(date)</div><div class="service-desc">Daily job: compare gateway settlements with ledger; flag mismatches</div></div>
-        <div class="service-card"><h3>FraudDetectionService</h3><div class="service-method">checkFraud(request)</div><div class="service-desc">Velocity checks, amount limits, device fingerprint, IP geolocation</div></div>
+        <div class="service-card">
+            <h3>PaymentService</h3>
+            <p class="svc-desc">Starts a payment — checks for duplicate requests, checks for fraud, then calls the payment gateway</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Start a new payment</div><code>Payment initiatePayment(PaymentRequest request)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>GatewayRoutingService</h3>
+            <p class="svc-desc">Picks the best payment gateway (Razorpay, Stripe, etc.) based on payment method and success rate</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Choose the best gateway for this payment</div><code>GatewayProvider selectGateway(PaymentMethod method, BigDecimal amount)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>RefundService</h3>
+            <p class="svc-desc">Processes refunds — checks if refund is allowed, calls gateway, and updates records</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Refund money back to the user</div><code>Refund refund(String paymentId, BigDecimal amount)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>WalletService</h3>
+            <p class="svc-desc">Manages user wallet — checks balance and deducts money safely (with database lock)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Deduct money from user's wallet</div><code>void debit(Long userId, BigDecimal amount)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>LedgerService</h3>
+            <p class="svc-desc">Keeps a record of every money movement — every payment creates both a debit and credit entry</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Record a money movement in the ledger</div><code>void recordEntry(LedgerEntry entry)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>WebhookService</h3>
+            <p class="svc-desc">Receives payment status updates from gateways — verifies it's genuine, then updates our records</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Process a webhook from payment gateway</div><code>void processWebhook(String payload, String signature)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>ReconciliationService</h3>
+            <p class="svc-desc">Daily check — compares our records with the payment gateway's records to find mismatches</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Run daily reconciliation for a date</div><code>ReconciliationReport reconcile(LocalDate date)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>FraudDetectionService</h3>
+            <p class="svc-desc">Checks for suspicious payments — unusual amounts, too many attempts, unknown location</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if a payment looks suspicious</div><code>void checkFraud(PaymentRequest request)</code></div>
+        </div>
     </div>
 </div>
 
@@ -7443,6 +7661,16 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">Webhook Latency</div><div class="cap-value">Process within 5 seconds of receipt</div></div>
         <div class="cap-card"><div class="cap-label">Refund Rate</div><div class="cap-value">~3-5% of total payments</div></div>
         <div class="cap-card"><div class="cap-label">Reconciliation</div><div class="cap-value">Daily batch; 99.99% match rate target</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Peak TPS</span><span class="calc-value">~500 txn/sec</span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~100 TPS (heavy processing)</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~5 servers</span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores (8 per server)</span><span class="calc-value">~40 cores</span></div>
+            <div class="calc-row"><span class="calc-label">DB (primary + replicas)</span><span class="calc-value">3 nodes (HA)</span></div>
+            <div class="calc-row"><span class="calc-label">Redis (idempotency cache)</span><span class="calc-value">3 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">Kafka (webhooks + events)</span><span class="calc-value">3 brokers</span></div>
+        </div>
     </div>
 </div>
 
@@ -7772,13 +8000,41 @@ Url url = <span class="kw">new</span> UrlBuilder()
 <div class="section theme-purple">
     <div class="section-title"><span class="section-num">9</span>Service Layer</div>
     <div class="service-grid">
-        <div class="service-card"><h3>CartService</h3><div class="service-method">addItem(productId, qty)</div><div class="service-desc">Validates stock → adds/updates item → recalculates totals</div></div>
-        <div class="service-card"><h3>InventoryService</h3><div class="service-method">reserve(productId, qty)</div><div class="service-desc">Optimistic lock → check available → increment reserved; auto-release after 15min TTL</div></div>
-        <div class="service-card"><h3>PricingEngine</h3><div class="service-method">calculate(cart)</div><div class="service-desc">Computes subtotal, applies coupon discount, calculates tax by shipping state</div></div>
-        <div class="service-card"><h3>CouponService</h3><div class="service-method">validate(code, cart)</div><div class="service-desc">Checks validity, min amount, usage limit, per-user limit; applies discount</div></div>
-        <div class="service-card"><h3>CheckoutService</h3><div class="service-method">checkout(request)</div><div class="service-desc">Reserve inventory → create order → initiate payment → on success confirm stock</div></div>
-        <div class="service-card"><h3>OrderService</h3><div class="service-method">createOrder(cart, address)</div><div class="service-desc">Converts cart to order; manages order lifecycle; emits OrderCreated event</div></div>
-        <div class="service-card"><h3>AbandonedCartService</h3><div class="service-method">processAbandoned()</div><div class="service-desc">Cron: carts inactive &gt; 24h → send recovery email; release reservations</div></div>
+        <div class="service-card">
+            <h3>CartService</h3>
+            <p class="svc-desc">Manages shopping cart — add items, update quantity, and recalculate total</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Add a product to the cart</div><code>Cart addItem(Long productId, int quantity)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>InventoryService</h3>
+            <p class="svc-desc">Reserves stock when user adds to cart, auto-releases after 15 minutes if not purchased</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Reserve stock for a product</div><code>boolean reserve(Long productId, int quantity)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>PricingEngine</h3>
+            <p class="svc-desc">Calculates the final price — adds up items, applies coupon discount, and calculates tax</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Calculate total price for the cart</div><code>PriceBreakdown calculate(Cart cart)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>CouponService</h3>
+            <p class="svc-desc">Checks if a coupon code is valid (not expired, minimum amount met, not already used)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check coupon and apply discount</div><code>CouponResult validate(String code, Cart cart)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>CheckoutService</h3>
+            <p class="svc-desc">Full checkout flow — reserve stock, create order, start payment, confirm on success</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Process the complete checkout</div><code>Order checkout(CheckoutRequest request)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>OrderService</h3>
+            <p class="svc-desc">Creates an order from the cart and manages its lifecycle (placed, shipped, delivered)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new order from cart</div><code>Order createOrder(Cart cart, Long addressId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>AbandonedCartService</h3>
+            <p class="svc-desc">Sends reminder emails for carts left inactive for 24+ hours and releases reserved stock</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Process all abandoned carts (runs as scheduled job)</div><code>void processAbandoned()</code></div>
+        </div>
     </div>
 </div>
 
@@ -7868,6 +8124,16 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">Cart Abandonment Rate</div><div class="cap-value">~70%</div></div>
         <div class="cap-card"><div class="cap-label">Avg Cart Size</div><div class="cap-value">3.5 items</div></div>
         <div class="cap-card"><div class="cap-label">Reservation TTL</div><div class="cap-value">15 minutes</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Inventory check QPS</span><span class="calc-value">~5,000 QPS</span></div>
+            <div class="calc-row"><span class="calc-label">Peak checkout (flash sale)</span><span class="calc-value">~500 orders/sec</span></div>
+            <div class="calc-row"><span class="calc-label">Each server handles</span><span class="calc-value">~2K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">App Servers Needed</span><span class="calc-value">~5 servers</span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores (4 per server)</span><span class="calc-value">~20 cores</span></div>
+            <div class="calc-row"><span class="calc-label">Redis (cart + inventory lock)</span><span class="calc-value">3 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">DB (orders, with replicas)</span><span class="calc-value">3 nodes</span></div>
+        </div>
     </div>
 </div>
 
@@ -8196,14 +8462,46 @@ Url url = <span class="kw">new</span> UrlBuilder()
 <div class="section theme-purple">
     <div class="section-title"><span class="section-num">9</span>Service Layer</div>
     <div class="service-grid">
-        <div class="service-card"><h3>RideService</h3><div class="service-method">requestRide(request)</div><div class="service-desc">Creates ride → calls MatchingEngine → assigns driver → notifies both</div></div>
-        <div class="service-card"><h3>MatchingEngine</h3><div class="service-method">findBestMatch(request)</div><div class="service-desc">Redis GEORADIUS for nearby drivers; scores by distance + rating + acceptance rate</div></div>
-        <div class="service-card"><h3>PricingService</h3><div class="service-method">calculateFare(distance, duration, type)</div><div class="service-desc">Base fare + per-km + per-min + surge; Strategy for ride types</div></div>
-        <div class="service-card"><h3>SurgePricingService</h3><div class="service-method">getSurgeMultiplier(lat, lng)</div><div class="service-desc">Demand/supply ratio in geohash cell; 1.0×-3.0× multiplier; decays over time</div></div>
-        <div class="service-card"><h3>LocationService</h3><div class="service-method">updateLocation(driverId, lat, lng)</div><div class="service-desc">Redis GEOADD for real-time; Kafka → TimescaleDB for history; WebSocket push to rider</div></div>
-        <div class="service-card"><h3>ETAService</h3><div class="service-method">calculateETA(from, to)</div><div class="service-desc">Google Maps Distance Matrix API; cache popular routes; historical traffic patterns</div></div>
-        <div class="service-card"><h3>RatingService</h3><div class="service-method">rate(rideId, score)</div><div class="service-desc">Saves rating; updates driver/rider rolling average; flags low-rated drivers</div></div>
-        <div class="service-card"><h3>NotificationService</h3><div class="service-method">notifyDriver(driverId, ride)</div><div class="service-desc">Push notification to driver with ride details; 30s timeout to accept</div></div>
+        <div class="service-card">
+            <h3>RideService</h3>
+            <p class="svc-desc">Handles ride requests — creates ride, finds a driver, assigns them, and notifies both</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Request a new ride</div><code>Ride requestRide(RideRequest request)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>MatchingEngine</h3>
+            <p class="svc-desc">Finds the best driver nearby — searches by location, then ranks by distance, rating, and acceptance rate</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Find the best available driver for the ride</div><code>Optional&lt;Driver&gt; findBestMatch(RideRequest request)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>PricingService</h3>
+            <p class="svc-desc">Calculates ride fare — base fare + per km + per minute + surge pricing</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Calculate the fare for a ride</div><code>BigDecimal calculateFare(double distanceKm, int durationMin, RideType type)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>SurgePricingService</h3>
+            <p class="svc-desc">Increases price when demand is high in an area (1x to 3x multiplier)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get the surge multiplier for a location</div><code>double getSurgeMultiplier(double lat, double lng)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>LocationService</h3>
+            <p class="svc-desc">Tracks driver location in real-time using Redis, shows live position to the rider</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Update driver's current location</div><code>void updateLocation(Long driverId, double lat, double lng)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>ETAService</h3>
+            <p class="svc-desc">Estimates how long the driver will take to arrive at pickup or drop location</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Calculate estimated time of arrival</div><code>Duration calculateETA(GeoPoint from, GeoPoint to)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>RatingService</h3>
+            <p class="svc-desc">Handles rider and driver ratings after a trip, flags low-rated drivers</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Rate a ride (1-5 stars)</div><code>void rate(String rideId, int score, String feedback)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>NotificationService</h3>
+            <p class="svc-desc">Sends push notifications to drivers about new ride requests (30 second timeout to accept)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Notify driver about a new ride request</div><code>void notifyDriver(Long driverId, Ride ride)</code></div>
+        </div>
     </div>
 </div>
 
@@ -8281,6 +8579,18 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">WebSocket Connections</div><div class="cap-value">~10M concurrent (riders + drivers)</div></div>
         <div class="cap-card"><div class="cap-label">Location History Storage</div><div class="cap-value">~500 GB/day (TimescaleDB, 7-day retention)</div></div>
         <div class="cap-card"><div class="cap-label">Avg Trip Duration</div><div class="cap-value">~20 minutes</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Location update QPS</span><span class="calc-value">~1.7M/sec</span></div>
+            <div class="calc-row"><span class="calc-label">Matching QPS</span><span class="calc-value">~200/sec</span></div>
+            <div class="calc-row"><span class="calc-label">Each location server handles</span><span class="calc-value">~50K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">Location Servers Needed</span><span class="calc-value">~34 servers</span></div>
+            <div class="calc-row"><span class="calc-label">Each matching server handles</span><span class="calc-value">~50 matches/sec</span></div>
+            <div class="calc-result"><span class="calc-label">Matching Servers Needed</span><span class="calc-value">~4 servers</span></div>
+            <div class="calc-row" style="margin-top:6px"><span class="calc-label">WebSocket Servers (50K conn/server)</span><span class="calc-value">~200 servers</span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores (all services)</span><span class="calc-value">~1,000+ cores</span></div>
+            <div class="calc-row"><span class="calc-label">Redis GEO Cluster</span><span class="calc-value">5-10 nodes</span></div>
+        </div>
     </div>
 </div>
 
@@ -8628,14 +8938,46 @@ Url url = <span class="kw">new</span> UrlBuilder()
 <div class="section theme-purple">
     <div class="section-title"><span class="section-num">9</span>Service Layer</div>
     <div class="service-grid">
-        <div class="service-card"><h3>ContentService</h3><div class="service-method">getById(id, region)</div><div class="service-desc">Returns content if available in user's region; filters by maturity level</div></div>
-        <div class="service-card"><h3>StreamingService</h3><div class="service-method">getStream(contentId, profileId)</div><div class="service-desc">Validates subscription, checks concurrent screens, returns signed HLS URL</div></div>
-        <div class="service-card"><h3>RecommendationEngine</h3><div class="service-method">getPersonalized(profileId)</div><div class="service-desc">Collaborative filtering + content-based; pre-computed via Spark, cached in Redis</div></div>
-        <div class="service-card"><h3>SearchService</h3><div class="service-method">search(query, filters)</div><div class="service-desc">Elasticsearch with autocomplete, fuzzy matching, boosted by popularity</div></div>
-        <div class="service-card"><h3>ProfileService</h3><div class="service-method">create(accountId, profile)</div><div class="service-desc">Max 5 profiles; kids profile auto-sets maturity filter; PIN protection</div></div>
-        <div class="service-card"><h3>SubscriptionService</h3><div class="service-method">canStream(accountId)</div><div class="service-desc">Checks plan active, concurrent screen count, max resolution for plan</div></div>
-        <div class="service-card"><h3>WatchHistoryService</h3><div class="service-method">updateProgress(profileId, contentId, sec)</div><div class="service-desc">Upserts watch progress; marks completed at 95%; used for Continue Watching</div></div>
-        <div class="service-card"><h3>DownloadService</h3><div class="service-method">requestDownload(contentId)</div><div class="service-desc">Checks download limit per plan; generates encrypted offline package with expiry</div></div>
+        <div class="service-card">
+            <h3>ContentService</h3>
+            <p class="svc-desc">Shows movies and shows available in the user's region and age group</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get content details (checks region and maturity level)</div><code>Content getById(Long contentId, String region)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>StreamingService</h3>
+            <p class="svc-desc">Delivers video stream — checks subscription, screen limit, and returns the video URL</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get the stream URL for a movie/show</div><code>StreamResponse getStream(Long contentId, Long profileId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>RecommendationEngine</h3>
+            <p class="svc-desc">Suggests movies and shows based on what the user has watched before</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Get personalized recommendations for a profile</div><code>List&lt;Content&gt; getPersonalized(Long profileId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>SearchService</h3>
+            <p class="svc-desc">Helps users find content by title, genre, or actor with auto-complete and fuzzy matching</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Search for movies or shows</div><code>Page&lt;Content&gt; search(String query, SearchFilters filters)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>ProfileService</h3>
+            <p class="svc-desc">Manages profiles under one account — max 5 profiles, kids profile has content filter</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Create a new profile</div><code>Profile create(Long accountId, ProfileRequest profile)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>SubscriptionService</h3>
+            <p class="svc-desc">Checks if user can stream — is plan active? how many screens allowed? what quality?</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Check if account is allowed to stream</div><code>boolean canStream(Long accountId)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>WatchHistoryService</h3>
+            <p class="svc-desc">Tracks what user watched and where they stopped — used for "Continue Watching"</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Save or update watch progress</div><code>void updateProgress(Long profileId, Long contentId, int seconds)</code></div>
+        </div>
+        <div class="service-card">
+            <h3>DownloadService</h3>
+            <p class="svc-desc">Lets users download content for offline viewing (limited by plan)</p>
+            <div class="svc-fn"><div class="fn-desc"><span class="method-dot"></span> Start a download for offline viewing</div><code>DownloadPackage requestDownload(Long contentId)</code></div>
+        </div>
     </div>
 </div>
 
@@ -8726,6 +9068,17 @@ Url url = <span class="kw">new</span> UrlBuilder()
         <div class="cap-card"><div class="cap-label">Watch Progress Writes</div><div class="cap-value">~500K writes/sec</div></div>
         <div class="cap-card"><div class="cap-label">Recommendation Cache</div><div class="cap-value">~50 GB Redis (250M profiles × 200B each)</div></div>
         <div class="cap-card"><div class="cap-label">Avg Session Duration</div><div class="cap-value">~90 minutes</div></div>
+        <div class="cap-card">
+            <h4 style="color:#82b1ff;margin-bottom:8px">CPU / Server Estimation</h4>
+            <div class="calc-row"><span class="calc-label">Concurrent streams (peak)</span><span class="calc-value">~15M</span></div>
+            <div class="calc-row"><span class="calc-label">Watch progress writes/sec</span><span class="calc-value">~500K/sec</span></div>
+            <div class="calc-row"><span class="calc-label">Each API server handles</span><span class="calc-value">~10K QPS</span></div>
+            <div class="calc-result"><span class="calc-label">API Servers Needed</span><span class="calc-value">~50 servers</span></div>
+            <div class="calc-result"><span class="calc-label">Total CPU Cores (8 per server)</span><span class="calc-value">~400 cores</span></div>
+            <div class="calc-row"><span class="calc-label">Recommendation Engine</span><span class="calc-value">Spark cluster (100+ nodes)</span></div>
+            <div class="calc-row"><span class="calc-label">Redis Cluster (cache)</span><span class="calc-value">10-20 nodes</span></div>
+            <div class="calc-row"><span class="calc-label">CDN Edge Servers</span><span class="calc-value">10,000+ globally</span></div>
+        </div>
     </div>
 </div>
 
